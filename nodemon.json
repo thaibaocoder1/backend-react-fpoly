@@ -1,0 +1,7 @@
+{
+  "ext": "ts, json, tsx",
+  "exec": "tsx --no-cache ./index.ts",
+  "execMap": {
+    "ts": "ts"
+  }
+}
