@@ -8,7 +8,6 @@ interface Orders extends Document {
   payment: string;
   status: number;
   userId: Schema.Types.ObjectId;
-  cancelCount: number;
   deliveryFee: number;
   phone: string;
 }
@@ -48,10 +47,6 @@ const orderSchema: Schema = new Schema<Orders>(
       type: Schema.Types.ObjectId,
       required: true,
       ref: "User",
-    },
-    cancelCount: {
-      type: Number,
-      default: 0,
     },
     phone: {
       type: String,

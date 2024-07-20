@@ -16,12 +16,17 @@ const imageSchema: Schema = new Schema<Images>({
   contentType: { type: String, required: true },
   fileName: { type: String, required: true },
 });
-const reviewSchema: Schema = new Schema<Reviews>({
-  userId: { type: Schema.Types.ObjectId, required: true },
-  content: { type: String, required: true },
-  fullname: { type: String, required: true },
-  rating: { type: Number, required: true },
-});
+const reviewSchema: Schema = new Schema<Reviews>(
+  {
+    userId: { type: Schema.Types.ObjectId, required: true },
+    content: { type: String, required: true },
+    fullname: { type: String, required: true },
+    rating: { type: Number, required: true },
+  },
+  {
+    timestamps: true,
+  }
+);
 interface Products extends Document {
   categoryID: string;
   name: string;

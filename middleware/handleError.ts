@@ -13,7 +13,6 @@ const ErrorHandler = (
     success: false,
     status: errStatus,
     message: errMsg,
-    stack: process.env.NODE_ENV === "development" ? err.stack : {},
   });
 };
 

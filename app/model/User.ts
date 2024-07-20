@@ -65,6 +65,7 @@ interface Users extends MongooseDelete.SoftDeleteDocument {
   role: string;
   imageUrl?: Object;
   isActive: boolean;
+  cancelCount: number;
   cart: UsersCart[];
   coupon: UsersCoupon[];
   wishlist: string[];
@@ -110,6 +111,10 @@ const userSchema = new Schema<Users>(
     isActive: {
       type: Boolean,
       default: false,
+    },
+    cancelCount: {
+      type: Number,
+      default: 0,
     },
     cart: {
       type: [usersCartSchema],

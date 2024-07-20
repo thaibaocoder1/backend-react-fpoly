@@ -21,6 +21,7 @@ router.patch("/restore", userController.restore);
 router.delete("/soft/:id", userController.softDelete);
 router.delete("/:id", userController.delete);
 router.patch("/update-fields/:id", userController.updateFields);
+router.patch("/cancel-count/:id", userController.cancelOrder);
 router.get("/trash", userController.trash);
 router.get("/:id", userController.detail);
 router.get("/", userController.index);

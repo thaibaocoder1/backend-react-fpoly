@@ -104,23 +104,12 @@ class OrderController {
     try {
       const { id, status } = req.body;
       const order = await Order.findById({ _id: id });
-      let cancelCount = 0;
       if (order) {
-        cancelCount = order.cancelCount as number;
-        if (status === 5) {
-          cancelCount++;
-          await Order.updateOne(
-            { _id: req.params.id },
-            { status, cancelCount },
-            { new: true, runValidators: true }
-          );
-        } else {
-          await Order.updateOne(
-            { _id: req.params.id },
-            { status },
-            { new: true, runValidators: true }
-          );
-        }
+        await Order.updateOne(
+          { _id: req.params.id },
+          { status },
+          { new: true, runValidators: true }
+        );
         res.status(StatusCodes.CREATED).json({
           success: true,
           message: "Update successfully!",
@@ -210,10 +199,10 @@ class OrderController {
         await waitForFile(filePath);
         const pdfContent = await readFile(filePath);
         (await mailer.createTransporter()).sendMail({
-          from: "bSmart ADMIN",
+          from: "BSmart ADMIN",
           to: order.email,
-          subject: "Đơn hành thanh toán tại bSmart ✔",
-          text: "Đơn hành thanh toán tại bSmart",
+          subject: "Đơn hành thanh toán tại BSmart ✔",
+          text: "Đơn hành thanh toán tại BSmart",
           attachments: [
             {
               filename: "invoice.pdf",
@@ -230,13 +219,11 @@ class OrderController {
         return res.status(StatusCodes.NOT_FOUND).json({
           success: false,
           message: "Không có đơn hàng nào được tìm thấy.",
+          data: null,
         });
       }
     } catch (error) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        success: false,
-        message: "Đã xảy ra lỗi khi lấy thông tin đơn hàng.",
-      });
+      next(error);
     }
   };
 }

@@ -26,7 +26,7 @@ const createTransporter = async () => {
 };
 
 const renderInvoice = async (order: any, orderDetail: any) => {
-  const invoiceFolderPath = "public/invoice";
+  const invoiceFolderPath = "public/invoices";
   const fileName = `invoice-${order._id}.pdf`;
   const filePath = path.join(invoiceFolderPath, fileName);
   const fontPath = "fonts/Roboto-Regular.ttf";

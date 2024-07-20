@@ -110,13 +110,18 @@ class ProductController {
       const query = Product.find();
       const products = await query;
       if (products?.length === 0) {
-        throw new Error("Products list is empty!");
+        res.status(StatusCodes.NOT_FOUND).json({
+          success: false,
+          message: "READ failed!",
+          data: null,
+        });
+      } else {
+        res.status(StatusCodes.OK).json({
+          success: true,
+          message: "READ",
+          data: products,
+        });
       }
-      res.status(StatusCodes.OK).json({
-        success: true,
-        message: "READ",
-        data: products,
-      });
     } catch (error) {
       next(error);
     }

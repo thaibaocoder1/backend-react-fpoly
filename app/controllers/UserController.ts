@@ -122,9 +122,8 @@ class UserController {
       } else {
         let user: any;
         const hashPassword: string = await bcrypt.hash(value.password, salt);
-        const hashCPassowrd: string = await bcrypt.hash(value.password, salt);
         value.password = hashPassword;
-        value.retypePassword = hashCPassowrd;
+        value.retypePassword = hashPassword;
         value.isActive = true;
         user = await User.create(value);
         if (user) {
@@ -246,6 +245,37 @@ class UserController {
         status: "failed",
         message: "ERROR froms server",
       });
+    }
+  };
+  cancelOrder = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { userId, cancelCount } = req.body;
+      const user = await User.findById({ _id: userId });
+      let cancelCountTemp = 0;
+      if (user) {
+        cancelCountTemp = user.cancelCount as number;
+        cancelCountTemp++;
+        await User.updateOne(
+          { _id: userId },
+          {
+            $set: { cancelCount: cancelCountTemp },
+          },
+          { new: true, runValidators: true }
+        );
+        res.status(StatusCodes.CREATED).json({
+          success: true,
+          message: "Update successfully!",
+          data: user,
+        });
+      } else {
+        res.status(StatusCodes.NOT_FOUND).json({
+          success: false,
+          message: "Update failed!",
+          data: null,
+        });
+      }
+    } catch (error) {
+      next(error);
     }
   };
   // Delete
