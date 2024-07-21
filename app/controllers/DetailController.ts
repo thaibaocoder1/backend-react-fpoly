@@ -65,26 +65,25 @@ class DetailController {
     try {
       const details = await Detail.find().populate({
         path: "orderID",
-        match: { status: 3 },
+        match: { status: 4 },
       });
+      console.log(details);
       const orders = details.filter((detail) => detail.orderID !== null);
       if (orders) {
         return res.status(StatusCodes.OK).json({
           success: true,
-          results: orders.length,
+          message: "READ",
           data: orders,
         });
       } else {
         return res.status(StatusCodes.NOT_FOUND).json({
           success: false,
           message: "Không có đơn hàng nào được tìm thấy.",
+          data: null,
         });
       }
     } catch (error) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        success: false,
-        message: "Đã xảy ra lỗi khi lấy thông tin đơn hàng.",
-      });
+      next(error);
     }
   };
 }

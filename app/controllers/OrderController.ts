@@ -31,7 +31,7 @@ async function waitForFile(filePath: string): Promise<void> {
 class OrderController {
   index = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { _page, _limit, _search, _status } = req.query;
+      const { _page, _limit, _search, _status, _all } = req.query;
       const skip = ((Number(_page) || 1) - 1) * Number(_limit);
       const filters = {
         status: !!_status ? Number(_status) : { $exists: true },
@@ -44,9 +44,11 @@ class OrderController {
             ].filter(Boolean),
           }),
       };
-      const query = Order.find(filters).skip(skip).limit(Number(_limit));
+      const query = Order.find(_all ? {} : filters)
+        .skip(skip)
+        .limit(Number(_limit));
       const orders = await query;
-      const totalOrders = await Order.countDocuments(filters);
+      const totalOrders = await Order.countDocuments(_all ? {} : filters);
       res.status(StatusCodes.OK).json({
         success: true,
         message: "Read success",
@@ -77,15 +79,17 @@ class OrderController {
   };
   order = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { _page, _limit, _status } = req.query;
+      const { _page, _limit, _status, _all } = req.query;
       const skip = ((Number(_page) || 1) - 1) * Number(_limit);
       const filters = {
         userId: req.params.id,
         status: !!_status ? Number(_status) : { $exists: true },
       };
-      const query = Order.find(filters).skip(skip).limit(Number(_limit));
+      const query = Order.find(_all ? {} : filters)
+        .skip(skip)
+        .limit(Number(_limit));
       const order = await query;
-      const countOrders = await Order.countDocuments(filters);
+      const countOrders = await Order.countDocuments(_all ? {} : filters);
       res.status(StatusCodes.OK).json({
         success: true,
         message: "Get successfully",

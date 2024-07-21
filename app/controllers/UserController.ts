@@ -9,7 +9,7 @@ class UserController {
   // Get all
   index = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { _page, _limit, _search } = req.query;
+      const { _page, _limit, _search, _all } = req.query;
       const skip = ((Number(_page) || 1) - 1) * Number(_limit);
       const filters = {
         ...(_search &&
@@ -21,9 +21,11 @@ class UserController {
             ].filter(Boolean),
           }),
       };
-      const query = User.find(filters).skip(skip).limit(Number(_limit));
+      const query = User.find(_all ? {} : filters)
+        .skip(skip)
+        .limit(Number(_limit));
       const users = await query;
-      const totalUsers = await User.countDocuments(filters);
+      const totalUsers = await User.countDocuments(_all ? {} : filters);
       res.status(StatusCodes.OK).json({
         success: true,
         message: "READ",
