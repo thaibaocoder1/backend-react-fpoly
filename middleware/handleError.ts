@@ -1,7 +1,7 @@
 import { NextFunction, Response, Request } from "express";
 import { StatusCodes } from "http-status-codes";
 
-const ErrorHandler = (
+const errorHandler = (
   err: Error,
   req: Request,
   res: Response,
@@ -16,4 +16,4 @@ const ErrorHandler = (
   });
 };
 
-export default ErrorHandler;
+export default errorHandler;

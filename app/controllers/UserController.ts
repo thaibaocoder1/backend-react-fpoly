@@ -502,7 +502,8 @@ class UserController {
           res.status(StatusCodes.CREATED).json({
             success: true,
             message: "Created User Successfully!",
-            data: user,
+            data: null,
+            created: true,
           });
         } else {
           res.status(StatusCodes.NOT_FOUND).json({
@@ -524,7 +525,7 @@ class UserController {
         res.status(StatusCodes.NOT_FOUND).json({
           success: false,
           message: "Tài khoản không tồn tại!",
-          data: null,
+          isActive: false,
         });
       } else {
         const now = Math.floor(Date.now());
@@ -535,9 +536,8 @@ class UserController {
         if (user?.isActive === true) {
           res.status(StatusCodes.OK).json({
             success: true,
-            isActive: true,
+            isActive: false,
             message: "Account has already active!",
-            data: user,
           });
         } else {
           if (now - timeCreated > 5 * 60 * 1000) {
@@ -545,10 +545,10 @@ class UserController {
             return res.status(StatusCodes.UNAUTHORIZED).json({
               success: false,
               message: "Tài khoản đã hết hạn active.",
-              data: null,
+              isActive: false,
             });
           } else {
-            const user = await User.findOneAndUpdate(
+            await User.findOneAndUpdate(
               { _id: id },
               { isActive: true },
               { new: true }
@@ -556,7 +556,7 @@ class UserController {
             res.status(StatusCodes.CREATED).json({
               success: true,
               message: "Kích hoạt tài khoản thành công",
-              data: user,
+              isActive: true,
             });
           }
         }
